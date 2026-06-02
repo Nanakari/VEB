@@ -45,3 +45,34 @@ def test_revision_skips_unsupported_main_subject_np() -> None:
     result = revise_caption(caption, objects, gaps)
     assert result.revised_caption == caption
     assert result.actions[0].action == "skip"
+
+
+def test_revision_skips_glass_door_compound_fragment() -> None:
+    caption = "The shower stall is a walk-in shower with a glass door."
+    objects = [_obj("glass", caption)]
+    gaps = [{"object_index": 1, "support": 0.0, "cumulative_gap": 0.9, "state": "remove_candidate"}]
+    result = revise_caption(caption, objects, gaps)
+    assert result.revised_caption == caption
+    assert result.actions[0].action == "skip"
+    assert result.actions[0].rule == "compound_fragment"
+
+
+def test_revision_skips_truck_bed_compound_fragment() -> None:
+    caption = "Some people are sitting on the truck bed and others are standing."
+    objects = [_obj("bed", caption)]
+    gaps = [{"object_index": 1, "support": 0.0, "cumulative_gap": 0.9, "state": "remove_candidate"}]
+    result = revise_caption(caption, objects, gaps)
+    assert result.revised_caption == caption
+    assert result.actions[0].action == "skip"
+    assert result.actions[0].rule == "compound_fragment"
+
+
+def test_revision_skips_word_internal_match() -> None:
+    caption = "The bookshelf is filled with books."
+    start = caption.index("book")
+    objects = [{"text": "book", "normalized": "book", "span": [start, start + 4], "object_index": 1}]
+    gaps = [{"object_index": 1, "support": 0.0, "cumulative_gap": 0.9, "state": "remove_candidate"}]
+    result = revise_caption(caption, objects, gaps)
+    assert result.revised_caption == caption
+    assert result.actions[0].action == "skip"
+    assert result.actions[0].rule == "compound_fragment"

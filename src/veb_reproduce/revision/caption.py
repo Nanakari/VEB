@@ -16,6 +16,32 @@ _TRAILING_LOCAL_PP_RE = re.compile(
     r"^\s+(?:on|in|at|near|beside|next\s+to)\s+(?:a|an|the)?\s*[A-Za-z][A-Za-z0-9 -]*",
     re.IGNORECASE,
 )
+_FOLLOWING_WORD_RE = re.compile(r"^\s+([A-Za-z][A-Za-z0-9'-]*)")
+_PRECEDING_WORD_RE = re.compile(r"([A-Za-z][A-Za-z0-9'-]*)\s+$")
+_ARTICLE_TEXT_RE = re.compile(r"^(?:a|an|the)\s+", re.IGNORECASE)
+_COMPOUND_HEAD_WORDS = {
+    "bed",
+    "book",
+    "bottle",
+    "door",
+    "glass",
+    "head",
+    "monitors",
+    "monitor",
+    "platform",
+    "rack",
+    "shelf",
+    "shelves",
+    "stall",
+}
+_COMPOUND_MODIFIER_WORDS = {
+    "book",
+    "bookshelf",
+    "computer",
+    "shower",
+    "truck",
+    "walk-in",
+}
 
 
 @dataclass(frozen=True)
@@ -76,6 +102,11 @@ def revise_caption(
         object_name = str(obj.get("normalized") or obj.get("text") or "")
         if not _valid_span(caption, span):
             actions.append(_action(obj, state, "skip", "invalid_span", "missing_or_invalid_span", None, None))
+            continue
+        if _looks_like_compound_fragment(caption, span, object_name):
+            actions.append(
+                _action(obj, state, "skip", "compound_fragment", "object_inside_compound_phrase", span, None)
+            )
             continue
         if _overlaps_any(span, occupied):
             actions.append(_action(obj, state, "skip", "overlap", "overlapping_prior_edit", span, None))
@@ -152,6 +183,62 @@ def _extend_trailing_local_pp(caption: str, end: int) -> int:
 def _expand_article_left(text: str, start: int) -> int:
     match = _ARTICLE_BEFORE_RE.search(text[:start])
     return match.start() if match is not None else start
+
+
+def _looks_like_compound_fragment(caption: str, span: tuple[int, int], object_name: str) -> bool:
+    """Guard against deleting one word inside a larger local noun phrase.
+
+    The revision unit is an object phrase. If extraction matched only a modifier/head
+    fragment such as `glass` in `glass door`, `bed` in `truck bed`, or `book` inside
+    `bookshelf`, local deletion tends to leave ungrammatical text.
+    """
+
+    start, end = span
+    if start > 0 and caption[start - 1].isalnum():
+        return True
+    if end < len(caption) and caption[end : end + 1].isalnum():
+        return True
+
+    article_start = _expand_article_left(caption, start)
+    has_article = article_start < start and bool(_ARTICLE_TEXT_RE.match(caption[article_start:start]))
+    following = _FOLLOWING_WORD_RE.match(caption[end:])
+    preceding = _PRECEDING_WORD_RE.search(caption[:article_start])
+    previous_word = preceding.group(1).lower() if preceding is not None else ""
+    if previous_word in _COMPOUND_MODIFIER_WORDS:
+        return True
+    if following is None:
+        return False
+
+    next_word = following.group(1).lower()
+    normalized = object_name.lower()
+    # Multi-word objects are treated as standalone enough for the conservative edit
+    # rules below. Single-word objects still need compound-head checks even when
+    # article-backed, e.g. `a glass door`.
+    if " " in normalized:
+        return False
+    if next_word in _COMPOUND_HEAD_WORDS:
+        return True
+    if has_article:
+        return False
+    # A bare object immediately followed by another content word is usually a compound
+    # mention in these captions: glass door, truck bed, book shelf, shower head.
+    return next_word not in {
+        "and",
+        "or",
+        "is",
+        "are",
+        "was",
+        "were",
+        "on",
+        "in",
+        "at",
+        "near",
+        "beside",
+        "next",
+        "with",
+        "which",
+        "that",
+    }
 
 
 def _has_safe_left_boundary(text: str, start: int) -> bool:
