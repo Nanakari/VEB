@@ -2,9 +2,9 @@
 __pycache__/
 *.py[cod]
 
-outputs/
-data/
-models/
+/outputs/
+/data/
+/models/
 
 .env
 .venv/
