@@ -6,6 +6,7 @@ generation:
   opera:
     repo_path: external/OPERA
     eval_config: eval_configs/llava-1.5_eval.yaml
+    low_resource: true
     num_beams: 5
     scale_factor: 50
     threshold: 15

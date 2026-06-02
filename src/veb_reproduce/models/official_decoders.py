@@ -78,9 +78,12 @@ class OfficialDecoderGenerator:
         cfg_path = Path(method_config.get("eval_config", "eval_configs/llava-1.5_eval.yaml"))
         if not cfg_path.is_absolute():
             cfg_path = self.repo_path / cfg_path
+        options = ["model.merged_ckpt", model_path]
+        if "low_resource" in method_config:
+            options.extend(["model.low_resource", str(bool(method_config["low_resource"])).lower()])
         args = SimpleNamespace(
             cfg_path=str(cfg_path),
-            options=["model.merged_ckpt", model_path],
+            options=options,
         )
         cfg = Config(args)
         model_config = cfg.model_cfg
