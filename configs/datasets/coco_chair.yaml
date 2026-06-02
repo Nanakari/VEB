@@ -1,0 +1,9 @@
+name: coco_chair
+task: image_captioning
+prompt_key: caption
+metrics:
+  - chairs
+  - chairi
+  - caption_length
+  - object_count
+  - removal_rate

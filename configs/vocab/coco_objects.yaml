@@ -1,0 +1,161 @@
+objects:
+  - name: person
+    aliases: [person, people, man, woman, boy, girl, child, children]
+  - name: bicycle
+    aliases: [bicycle, bike]
+  - name: car
+    aliases: [car, automobile, vehicle]
+  - name: motorcycle
+    aliases: [motorcycle, motorbike]
+  - name: airplane
+    aliases: [airplane, aeroplane, plane]
+  - name: bus
+    aliases: [bus]
+  - name: train
+    aliases: [train]
+  - name: truck
+    aliases: [truck]
+  - name: boat
+    aliases: [boat]
+  - name: traffic light
+    aliases: [traffic light, stop light]
+  - name: fire hydrant
+    aliases: [fire hydrant, hydrant]
+  - name: stop sign
+    aliases: [stop sign]
+  - name: parking meter
+    aliases: [parking meter]
+  - name: bench
+    aliases: [bench]
+  - name: bird
+    aliases: [bird]
+  - name: cat
+    aliases: [cat]
+  - name: dog
+    aliases: [dog]
+  - name: horse
+    aliases: [horse]
+  - name: sheep
+    aliases: [sheep]
+  - name: cow
+    aliases: [cow]
+  - name: elephant
+    aliases: [elephant]
+  - name: bear
+    aliases: [bear]
+  - name: zebra
+    aliases: [zebra]
+  - name: giraffe
+    aliases: [giraffe]
+  - name: backpack
+    aliases: [backpack]
+  - name: umbrella
+    aliases: [umbrella]
+  - name: handbag
+    aliases: [handbag, bag, purse]
+  - name: tie
+    aliases: [tie]
+  - name: suitcase
+    aliases: [suitcase]
+  - name: frisbee
+    aliases: [frisbee]
+  - name: skis
+    aliases: [skis, ski]
+  - name: snowboard
+    aliases: [snowboard]
+  - name: sports ball
+    aliases: [sports ball, ball]
+  - name: kite
+    aliases: [kite]
+  - name: baseball bat
+    aliases: [baseball bat, bat]
+  - name: baseball glove
+    aliases: [baseball glove, glove]
+  - name: skateboard
+    aliases: [skateboard]
+  - name: surfboard
+    aliases: [surfboard]
+  - name: tennis racket
+    aliases: [tennis racket, racket]
+  - name: bottle
+    aliases: [bottle]
+  - name: wine glass
+    aliases: [wine glass, glass]
+  - name: cup
+    aliases: [cup]
+  - name: fork
+    aliases: [fork]
+  - name: knife
+    aliases: [knife]
+  - name: spoon
+    aliases: [spoon]
+  - name: bowl
+    aliases: [bowl]
+  - name: banana
+    aliases: [banana]
+  - name: apple
+    aliases: [apple]
+  - name: sandwich
+    aliases: [sandwich]
+  - name: orange
+    aliases: [orange]
+  - name: broccoli
+    aliases: [broccoli]
+  - name: carrot
+    aliases: [carrot]
+  - name: hot dog
+    aliases: [hot dog]
+  - name: pizza
+    aliases: [pizza]
+  - name: donut
+    aliases: [donut, doughnut]
+  - name: cake
+    aliases: [cake]
+  - name: chair
+    aliases: [chair]
+  - name: couch
+    aliases: [couch, sofa]
+  - name: potted plant
+    aliases: [potted plant, plant]
+  - name: bed
+    aliases: [bed]
+  - name: dining table
+    aliases: [dining table, table]
+  - name: toilet
+    aliases: [toilet]
+  - name: tv
+    aliases: [tv, television]
+  - name: laptop
+    aliases: [laptop, computer]
+  - name: mouse
+    aliases: [mouse]
+  - name: remote
+    aliases: [remote, remote control]
+  - name: keyboard
+    aliases: [keyboard]
+  - name: cell phone
+    aliases: [cell phone, phone, mobile phone]
+  - name: microwave
+    aliases: [microwave]
+  - name: oven
+    aliases: [oven]
+  - name: toaster
+    aliases: [toaster]
+  - name: sink
+    aliases: [sink]
+  - name: refrigerator
+    aliases: [refrigerator, fridge]
+  - name: book
+    aliases: [book]
+  - name: clock
+    aliases: [clock]
+  - name: vase
+    aliases: [vase]
+  - name: scissors
+    aliases: [scissors]
+  - name: teddy bear
+    aliases: [teddy bear]
+  - name: hair drier
+    aliases: [hair drier, hair dryer]
+  - name: toothbrush
+    aliases: [toothbrush]

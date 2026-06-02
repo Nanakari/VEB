@@ -1,0 +1,2 @@
+name: base
+description: Raw LLaVA generation without visual evidence calibration.

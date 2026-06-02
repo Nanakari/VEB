@@ -1,0 +1,9 @@
+name: pope
+task: object_existence_qa
+prompt_key: pope
+metrics:
+  - accuracy
+  - precision
+  - recall
+  - f1
+  - yes_ratio

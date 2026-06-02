@@ -1,0 +1,65 @@
+runtime:
+  device: cpu
+  dtype: float32
+  seed: 42
+
+generation:
+  backend: fake
+  pope_max_new_tokens: 10
+  caption_max_new_tokens: 64
+  fake:
+    default_answer: yes
+    default_caption: "A man is sitting at a table with a laptop and a cup."
+    outputs:
+      random:0: "yes"
+      smoke-caption-1: "A man is sitting at a table with a laptop and a cup."
+
+prompts:
+  pope: "Please answer the question based on the image.Question: {question}Answer with yes or no."
+  caption: "Please describe the image in detail."
+
+datasets:
+  pope:
+    paths:
+      image_root: examples/smoke/images
+      annotation_files:
+        random: examples/smoke/pope_random.jsonl
+  coco_chair:
+    paths:
+      samples_jsonl: examples/smoke/caption_samples.jsonl
+
+object_extraction:
+  backend: rule
+  vocabulary_path: configs/vocab/coco_objects.yaml
+
+evidence:
+  detector: fake
+  cache: true
+  evidence_threshold: 0.25
+  fake:
+    default_score: 0.0
+    scores:
+      person: 0.9
+      dining table: 0.9
+      cup: 0.8
+      laptop: 0.0
+      dog: 0.0
+
+veb:
+  lambda_gap: 0.8
+  tau1: 0.4
+  tau2: 0.8
+  tau_s: 0.25
+  tau_pope: 0.25
+  demand:
+    aggregation: mean
+    fallback_entropy: 0.5
+    fallback_margin: 0.5
+  revision:
+    allowed_rules:
+      - preposition_phrase
+      - coordination
+      - object_np_with_local_pp
+
+outputs:
+  root: outputs/smoke

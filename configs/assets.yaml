@@ -1,0 +1,10 @@
+models:
+  llava: models/llava-1.5-7b-hf
+  groundingdino_repo: models/GroundingDINO
+  groundingdino_checkpoint: models/groundingdino_swint_ogc.pth
+
+datasets:
+  coco_val_images: data/coco/val2014
+  coco_instances_val2014: data/coco/annotations/instances_val2014.json
+  coco_captions_val2014: data/coco/annotations/captions_val2014.json
+  pope_dir: data/pope
