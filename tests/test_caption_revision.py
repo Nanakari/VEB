@@ -76,3 +76,23 @@ def test_revision_skips_word_internal_match() -> None:
     assert result.revised_caption == caption
     assert result.actions[0].action == "skip"
     assert result.actions[0].rule == "compound_fragment"
+
+
+def test_revision_skips_of_glass_anchor() -> None:
+    caption = "The shower stall is made of glass and has a silver shower head."
+    objects = [_obj("glass", caption)]
+    gaps = [{"object_index": 1, "support": 0.0, "cumulative_gap": 0.9, "state": "remove_candidate"}]
+    result = revise_caption(caption, objects, gaps)
+    assert result.revised_caption == caption
+    assert result.actions[0].action == "skip"
+    assert result.actions[0].rule == "compound_fragment"
+
+
+def test_revision_skips_of_table_anchor_before_coordination() -> None:
+    caption = "One chair is visible on the left side of the table and another is nearby."
+    objects = [_obj("table", caption)]
+    gaps = [{"object_index": 1, "support": 0.0, "cumulative_gap": 0.9, "state": "remove_candidate"}]
+    result = revise_caption(caption, objects, gaps)
+    assert result.revised_caption == caption
+    assert result.actions[0].action == "skip"
+    assert result.actions[0].rule == "compound_fragment"

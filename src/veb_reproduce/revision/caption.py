@@ -100,10 +100,11 @@ def revise_caption(
     for obj, state in candidates:
         span = _object_span(obj)
         object_name = str(obj.get("normalized") or obj.get("text") or "")
+        object_text = str(obj.get("text") or object_name)
         if not _valid_span(caption, span):
             actions.append(_action(obj, state, "skip", "invalid_span", "missing_or_invalid_span", None, None))
             continue
-        if _looks_like_compound_fragment(caption, span, object_name):
+        if _looks_like_compound_fragment(caption, span, object_text):
             actions.append(
                 _action(obj, state, "skip", "compound_fragment", "object_inside_compound_phrase", span, None)
             )
@@ -204,6 +205,8 @@ def _looks_like_compound_fragment(caption: str, span: tuple[int, int], object_na
     following = _FOLLOWING_WORD_RE.match(caption[end:])
     preceding = _PRECEDING_WORD_RE.search(caption[:article_start])
     previous_word = preceding.group(1).lower() if preceding is not None else ""
+    if previous_word == "of":
+        return True
     if previous_word in _COMPOUND_MODIFIER_WORDS:
         return True
     if following is None:
