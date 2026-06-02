@@ -223,6 +223,9 @@ class OfficialDecoderGenerator:
         transformers_src = _embedded_transformers_src(self.repo_path)
         if transformers_src is not None:
             _insert_sys_path(transformers_src)
+        mplug_owl2_src = self.repo_path / "mPLUG-Owl" / "mPLUG-Owl2"
+        if mplug_owl2_src.exists():
+            _insert_sys_path(mplug_owl2_src)
         for module_name in [
             "minigpt4.datasets.builders",
             "minigpt4.models",
