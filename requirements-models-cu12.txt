@@ -3,6 +3,13 @@ torchvision
 accelerate>=0.27.0
 opencv-python>=4.8.0
 sentencepiece>=0.1.99
-transformers>=4.40.0
+transformers>=4.36.0
+einops>=0.6.1
+einops-exts>=0.0.4
+shortuuid>=1.0.11
+timm>=0.6.13
+git+https://github.com/haotian-liu/LLaVA.git
 spacy>=3.7.0
 pycocotools>=2.0.7
+omegaconf>=2.3.0
+iopath>=0.1.10

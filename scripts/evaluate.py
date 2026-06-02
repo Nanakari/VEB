@@ -21,35 +21,38 @@ def main() -> None:
     config = load_config(args.config)
     out_root = output_root(config, ROOT)
     if args.dataset == "pope":
-        base = list(read_jsonl(out_root / "pope_base_predictions.jsonl"))
-        veb = list(read_jsonl(out_root / "pope_veb_predictions.jsonl"))
-        report = {
-            "dataset": "pope",
-            "base": compute_pope_metrics(base),
-            "veb": compute_pope_metrics(veb),
-        }
+        report = {"dataset": "pope"}
+        for method in ["base", "veb", "halc", "opera"]:
+            path = out_root / f"pope_{method}_predictions.jsonl"
+            if path.exists():
+                report[method] = compute_pope_metrics(list(read_jsonl(path)))
         dump_json(out_root / "metrics_pope.json", report)
     else:
         extractor = build_extractor(config, ROOT)
-        base = []
-        for record in read_jsonl(out_root / "coco_base_captions.jsonl"):
-            caption = str(record.get("caption") or record.get("text") or "")
-            base.append({**record, "objects": [obj.to_dict() for obj in extractor.extract(caption)]})
-        veb = []
-        for record in read_jsonl(out_root / "coco_veb_revisions.jsonl"):
-            revised_caption = str(record.get("revised_caption") or "")
-            veb.append(
-                {
-                    **record,
-                    "caption": revised_caption,
-                    "objects": [obj.to_dict() for obj in extractor.extract(revised_caption)],
-                }
-            )
-        report = {
-            "dataset": "coco_chair",
-            "base": compute_chair_metrics(base),
-            "veb": compute_chair_metrics(veb),
-        }
+        report = {"dataset": "coco_chair"}
+        for method in ["base", "halc", "opera"]:
+            path = out_root / f"coco_{method}_captions.jsonl"
+            if path.exists():
+                records = []
+                for record in read_jsonl(path):
+                    caption = str(record.get("caption") or record.get("text") or "")
+                    records.append(
+                        {**record, "objects": [obj.to_dict() for obj in extractor.extract(caption)]}
+                    )
+                report[method] = compute_chair_metrics(records)
+        veb_path = out_root / "coco_veb_revisions.jsonl"
+        if veb_path.exists():
+            records = []
+            for record in read_jsonl(veb_path):
+                revised_caption = str(record.get("revised_caption") or "")
+                records.append(
+                    {
+                        **record,
+                        "caption": revised_caption,
+                        "objects": [obj.to_dict() for obj in extractor.extract(revised_caption)],
+                    }
+                )
+            report["veb"] = compute_chair_metrics(records)
         dump_json(out_root / "metrics_coco_chair.json", report)
 
 

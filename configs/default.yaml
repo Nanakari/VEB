@@ -4,12 +4,15 @@ runtime:
   seed: 42
 
 generation:
-  backend: llava_hf
+  backend: llava_original
   model_family: llava
-  model_name_or_path: models/llava-1.5-7b-hf
+  model_name_or_path: models/llava-v1.5-7b
+  model_base:
+  conv_mode: llava_v1
   temperature: 0.0
   top_p: 1.0
   do_sample: false
+  num_beams: 1
   return_token_scores: true
   pope_max_new_tokens: 10
   caption_max_new_tokens: 64

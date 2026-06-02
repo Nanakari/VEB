@@ -14,18 +14,18 @@ from veb_reproduce.evidence import build_detector
 from veb_reproduce.models import build_generator
 from veb_reproduce.pipeline import generate_for_sample, run_pope_veb_record
 from veb_reproduce.utils.answers import normalize_yes_no
-from veb_reproduce.utils.config import load_config, output_root
+from veb_reproduce.utils.config import load_run_config, output_root
 from veb_reproduce.utils.io import read_jsonl, write_jsonl
 
 
 def main() -> None:
     args = _parse_args()
-    config = load_config(args.config)
+    config = load_run_config(args.config, args.method, ROOT)
     out_root = output_root(config, ROOT)
-    if args.method == "base":
-        records = _run_base(config, limit=args.limit)
-        write_jsonl(out_root / "pope_base_predictions.jsonl", records)
-    else:
+    if args.method in {"base", "halc", "opera"}:
+        records = _run_generation(config, method=args.method, limit=args.limit)
+        write_jsonl(out_root / f"pope_{args.method}_predictions.jsonl", records)
+    elif args.method == "veb":
         base_path = out_root / "pope_base_predictions.jsonl"
         if not base_path.exists():
             raise FileNotFoundError(f"Run POPE base first: {base_path}")
@@ -36,9 +36,11 @@ def main() -> None:
                 break
             records.append(run_pope_veb_record(record, detector, config))
         write_jsonl(out_root / "pope_veb_predictions.jsonl", records)
+    else:
+        raise ValueError(f"Unsupported method: {args.method}")
 
 
-def _run_base(config: dict, *, limit: int | None) -> list[dict]:
+def _run_generation(config: dict, *, method: str, limit: int | None) -> list[dict]:
     generator = build_generator(config)
     dataset_config = config["datasets"]["pope"]
     samples = load_pope_samples(dataset_config, ROOT, limit_per_setting=limit)
@@ -61,7 +63,7 @@ def _run_base(config: dict, *, limit: int | None) -> list[dict]:
                 "image_id": sample.image_id,
                 "image_path": str(sample.image_path),
                 "dataset": "pope",
-                "method": "base",
+                "method": method,
                 "setting": sample.setting,
                 "question": sample.question,
                 "target_object": sample.target_object,
@@ -79,7 +81,7 @@ def _run_base(config: dict, *, limit: int | None) -> list[dict]:
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="configs/default.yaml")
-    parser.add_argument("--method", choices=["base", "veb"], required=True)
+    parser.add_argument("--method", choices=["base", "veb", "halc", "opera"], required=True)
     parser.add_argument("--limit", type=int)
     return parser.parse_args()
 

@@ -1,2 +1,5 @@
 name: base
 description: Raw LLaVA generation without visual evidence calibration.
+generation:
+  backend: llava_original
+  return_token_scores: true

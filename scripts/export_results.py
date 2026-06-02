@@ -39,8 +39,10 @@ def _table(title: str, report: dict, keys: list[str]) -> str:
     header = "| Method | " + " | ".join(keys) + " |"
     sep = "| --- | " + " | ".join(["---:"] * len(keys)) + " |"
     rows = [f"## {title}", "", header, sep]
-    for method in ["base", "veb"]:
+    for method in ["base", "veb", "halc", "opera"]:
         metrics = report.get(method, {})
+        if not metrics:
+            continue
         values = [f"{float(metrics.get(key, 0.0)):.4f}" for key in keys]
         rows.append("| " + method + " | " + " | ".join(values) + " |")
     return "\n".join(rows)

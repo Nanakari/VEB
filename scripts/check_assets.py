@@ -15,8 +15,13 @@ from veb_reproduce.utils.config import load_config, resolve_path
 def main() -> None:
     args = _parse_args()
     config = load_config(args.config)
+    model_ref = str(config.get("generation", {}).get("model_name_or_path", ""))
+    if "llava-hf/" in model_ref.lower() or model_ref.lower().endswith("-hf"):
+        print("Configured LLaVA checkpoint is the HF-converted variant.")
+        print("Use the original merged checkpoint, e.g. models/llava-v1.5-7b.")
+        raise SystemExit(1 if args.strict else 0)
     paths = [
-        config.get("generation", {}).get("model_name_or_path"),
+        model_ref,
         config.get("evidence", {}).get("groundingdino", {}).get("config_path"),
         config.get("evidence", {}).get("groundingdino", {}).get("checkpoint_path"),
         config.get("datasets", {}).get("coco_chair", {}).get("paths", {}).get("image_root"),

@@ -1,0 +1,18 @@
+name: halc
+description: Official HALC adaptive focal-contrast decoding baseline.
+generation:
+  backend: halc
+  return_token_scores: false
+  halc:
+    repo_path: external/HALC
+    eval_config: eval_configs/llava-1.5_eval.yaml
+    num_beams: 3
+    k_candidate_num: 4
+    expand_ratio: 0.6
+    context_domain: upper
+    contrast_weight: 0.05
+    context_window: 3
+    detector: dino
+    score_type: BLIP
+    box_threshold: 0.45
+    debugger: false

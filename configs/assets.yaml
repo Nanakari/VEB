@@ -1,5 +1,7 @@
 models:
-  llava: models/llava-1.5-7b-hf
+  llava: models/llava-v1.5-7b
+  halc_repo: external/HALC
+  opera_repo: external/OPERA
   groundingdino_repo: models/GroundingDINO
   groundingdino_checkpoint: models/groundingdino_swint_ogc.pth
 

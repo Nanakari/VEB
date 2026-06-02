@@ -1,0 +1,13 @@
+name: opera
+description: Official OPERA over-trust penalty and retrospection-allocation baseline.
+generation:
+  backend: opera
+  return_token_scores: false
+  opera:
+    repo_path: external/OPERA
+    eval_config: eval_configs/llava-1.5_eval.yaml
+    num_beams: 5
+    scale_factor: 50
+    threshold: 15
+    num_attn_candidates: 5
+    penalty_weights: 1.0
